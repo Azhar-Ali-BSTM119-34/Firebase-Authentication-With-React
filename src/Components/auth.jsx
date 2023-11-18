@@ -1,7 +1,11 @@
 import React from "react";
-import { auth } from "../confi/firebase";
+import { auth, googleProvider } from "../confi/firebase";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 function Authentication() {
   const [email, setEmail] = useState("");
@@ -15,6 +19,20 @@ function Authentication() {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div className="h-full w-full bg-black flex justify-center items-center">
       <div className="bg-white p-8 rounded shadow">
@@ -22,7 +40,7 @@ function Authentication() {
 
         <div className="mb-4">
           <label htmlFor="email" className="block mb-2">
-            email
+            Email
           </label>
           <input
             placeholder="email"
@@ -44,7 +62,19 @@ function Authentication() {
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={signIn}
         >
-          Login
+          SignIn
+        </button>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={signInWithGoogle}
+        >
+          Sign in with Google
+        </button>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={logOut}
+        >
+          LogOut
         </button>
       </div>
     </div>
