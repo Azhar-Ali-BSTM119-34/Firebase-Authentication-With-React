@@ -36,6 +36,7 @@ function Create() {
 
   return (
     <div>
+      <h1>Create a movie</h1>
       {/* Add a miovie */}
       <div>
         <label htmlFor="movieTittle">Movie Tittle</label>

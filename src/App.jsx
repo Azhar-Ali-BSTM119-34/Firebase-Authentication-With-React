@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, deleteDoc } from "firebase/firestore";
 import Authentication from "./Components/auth";
 import { db } from "./confi/firebase";
 import Create from "./Components/Create";
@@ -22,6 +22,11 @@ function App() {
     }
   };
 
+  const deleteMovie = async (id) => {
+    const movieDoc = doc(db, "movies", id);
+    await deleteDoc(movieDoc);
+  };
+
   useEffect(() => {
     getMoviesList();
   }, []);
@@ -34,7 +39,9 @@ function App() {
         {movieList.map((movie) => (
           <div>
             <h2>{movie.title}</h2>
+
             <p> Date: {movie.releaseData}</p>
+            <button onClick={() => deleteMovie(movie.id) }> Delete Movie</button>
           </div>
         ))}
       </div>
