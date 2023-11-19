@@ -2,33 +2,34 @@ import React, { useState, useEffect } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import Authentication from "./Components/auth";
 import { db } from "./confi/firebase";
+import Create from "./Components/Create";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
+  const moviesCollectionRef = collection(db, "movies");
+  //  taking the data from the database
+  const getMoviesList = async () => {
+    try {
+      const data = await getDocs(moviesCollectionRef);
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      console.log(filteredData);
+      setMovieList(filteredData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    // Assuming moviesCollectionRef is a reference to a Firestore collection
-    const moviesCollectionRef = collection(db, "movies");
-
-    const getMoviesList = async () => {
-      try {
-        const data = await getDocs(moviesCollectionRef);
-        const filteredData = data.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        movieList(filteredData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     getMoviesList();
   }, []);
-
   return (
     <>
       <Authentication />
+      <Create />
+      {/* List of movies */}
       <div>
         {movieList.map((movie) => (
           <div>
